@@ -35,6 +35,11 @@ class SafeAccess {
         return *ptr;
     }
 
+    NOINLINE __attribute__((aligned(16)))
+    static u32 load32(u32* ptr, u32 default_value) {
+        return *ptr;
+    }
+
     static uintptr_t skipFaultInstruction(uintptr_t pc) {
         if ((pc - (uintptr_t)load) < 16) {
 #if defined(__x86_64__)
@@ -50,6 +55,10 @@ class SafeAccess {
 #endif
         }
         return 0;
+    }
+
+    static bool isFaultLoad32(uintptr_t pc) {
+        return pc - (uintptr_t)load32 < 16;
     }
 };
 

@@ -808,6 +808,12 @@ void Profiler::segvHandler(int signo, siginfo_t* siginfo, void* ucontext) {
         return;
     }
 
+    if (WX_MEMORY && SafeAccess::isFaultLoad32(frame.pc())) {
+        frame.pc() += sizeof(instruction_t);
+        frame.retval() = frame.arg1();
+        return;
+    }
+
     if (WX_MEMORY && Trap::isFaultInstruction(frame.pc())) {
         return;
     }
